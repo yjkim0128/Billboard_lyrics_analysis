@@ -13,7 +13,7 @@ from django import forms
 RES_DIR = os.path.join(os.path.dirname(__file__), '..', 'res')
 
 class Lyric(forms.Form):
-    query = forms.CharField(max_length= 2000, label='Your lyrics here', required= True)
+    query = forms.CharField(max_length= 5000, required= True)
     show_args = forms.BooleanField(label='Show args_to_ui',
                                    required=False)
 

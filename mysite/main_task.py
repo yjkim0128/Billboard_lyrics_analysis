@@ -9,6 +9,7 @@ import preprocess as pre
 data = pd.read_csv('processed_lyrics.csv', sep='|')
 model = gensim.models.Word2Vec.load('billboard.model')
 
+
 def get_vocab_index(lyrics):
     total_vocab_count = {}
     for lyric in lyrics:
@@ -35,7 +36,7 @@ def get_tfidf(lyrics, vocab_index):
             if word in vocab_index:
                 tf[i, vocab_index[word]] += 1
                 docf[i, vocab_index[word]] = 1
-        max_t = max(tf[i])
+        max_t = max(max(tf[i]), 1)
         tf[i] = 0.5 + 0.5 * (tf[i] / max_t)
     docf_sum = docf.sum(axis=0)
     docf_log = np.log(n / docf_sum)
@@ -52,9 +53,12 @@ def get_mean_w2v(lyrics, model):
     w2v = np.zeros((n, 100))
     for i in range(n):
         words = [word for word in lyrics[i] if word in model.wv.vocab] 
-        mean_vec = np.mean(model.wv[words], axis=0)
-        norm = np.sqrt(np.sum(mean_vec**2))
-        w2v[i] = mean_vec/norm
+        if not words:
+            w2v[i] = np.zeros(100)
+        else:
+       		mean_vec = np.mean(model.wv[words], axis=0)
+        	norm = np.sqrt(np.sum(mean_vec**2))
+        	w2v[i] = mean_vec/norm
     return w2v
 
 def compute_similarity(lyric, data=data, model=model, weights=(1,2,2,4,1)):
@@ -67,8 +71,8 @@ def compute_similarity(lyric, data=data, model=model, weights=(1,2,2,4,1)):
     lyrics_split = lyrics.apply(lambda x: x.split())
     vocab_index = get_vocab_index(lyrics_split)
     tfidf = get_tfidf(lyrics_split, vocab_index)
-    model.build_vocab(lyrics_split[n], update=True) #cite
-    model.train(lyrics_split[n], total_examples=model.corpus_count, epochs=model.epochs)
+    #model.build_vocab(lyrics_split[n], update=True) #cite
+    #model.train(lyrics_split[n], total_examples=model.corpus_count, epochs=model.epochs)
     w2v = get_mean_w2v(lyrics_split, model)
     sample_sentiment = pre.find_sentiment(filtered_lyric)
     d_tfidf, d_w2v, d_sentiment = get_distances(tfidf, w2v, sample_sentiment, n, data)

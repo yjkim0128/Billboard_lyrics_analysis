@@ -1,3 +1,6 @@
+#Slightly different every time we run, since the Word2Vec model will be slightly different
+#We are only roughly estimating the correct weights, and the difference will not be extreme
+
 import pandas as pd
 import numpy as np
 import main_task as mt
@@ -22,8 +25,8 @@ def find_var_equal_constant():
         final_lyrics = lyrics_split.append(pd.Series([lyric_split]), ignore_index=True)
         vocab_index = mt.get_vocab_index(final_lyrics)
         tfidf = mt.get_tfidf(final_lyrics, vocab_index)
-        model_train.build_vocab(final_lyrics[n], update=True)
-        model_train.train(final_lyrics[n], total_examples=model_train.corpus_count, epochs=model_train.epochs)
+        #model_train.build_vocab(final_lyrics[n], update=True)
+        #model_train.train(final_lyrics[n], total_examples=model_train.corpus_count, epochs=model_train.epochs)
         w2v = mt.get_mean_w2v(final_lyrics, model_train)
         sent = pre.find_sentiment(lyric)
         d_tfidf, d_w2v, d_sent = mt.get_distances(tfidf, w2v, sent, n, train)
