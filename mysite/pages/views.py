@@ -8,20 +8,27 @@ import main_task
 from django.http import HttpResponse
 from django.shortcuts import render
 from django import forms
-#from .models import Song
 
 RES_DIR = os.path.join(os.path.dirname(__file__), '..', 'res')
 
 class Lyric(forms.Form):
-    query = forms.CharField(max_length= 5000, required= True)
+    '''
+    Constructor for lyric_view page
+    '''
+    query = forms.CharField(max_length= 5000, label='Your lyrics here', required= True)
     show_args = forms.BooleanField(label='Show args_to_ui',
                                    required=False)
 
 def lyric_view(request):
+    '''
+    Creates a webpage that inputs lyrics from the user and displays the most 
+    similar artist and the decade
+    '''
     context = {}
     res = None
     if request.method == 'GET':
         form = Lyric(request.GET)
+
         if form.is_valid():
             args = {}
             if form.cleaned_data['query']:
@@ -65,15 +72,24 @@ def lyric_view(request):
 
 
 class Artist(forms.Form):
+    '''
+    Constructor for artist_view page
+    '''
     query = forms.CharField(max_length= 100, label='Your artist here', required= True)
     show_args = forms.BooleanField(label='Show args_to_ui',
                                    required=False)
 
 def artist_view(request):
+    '''
+    Creates a webpage that inputs artist from the user and displays the most 
+    similar artist to the inputted artist
+    '''
+
     context = {}
     res = None
     if request.method == 'GET':
         form = Artist(request.GET)
+
         if form.is_valid():
             args = {}
             if form.cleaned_data['query']:
@@ -116,16 +132,25 @@ def artist_view(request):
     return render(request, "artist.html", context)
 
 class Posneg(forms.Form):
+    '''
+    Constructor for pos_neg page
+    '''
     query = forms.CharField(max_length= 100, label='Your artist/year here', required= True)
     show_args = forms.BooleanField(label='Show args_to_ui',
                                    required=False)
 
 
 def posneg_view(request):
+    '''
+    Creates a webpage that inputs artist/year from the user and displays songs 
+    with the most positive/negative sentiment of the given condition
+    '''
+
     context = {}
     res = None
     if request.method == 'GET':
-        form = Artist(request.GET)
+        form = Posneg(request.GET)
+
         if form.is_valid():
             args = {}
             if form.cleaned_data['query']:
