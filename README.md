@@ -6,8 +6,7 @@ All of the data and the models are accessible in the files, which means that the
 However, it is also possible to regenerate all the data from scratch using the .py files within the folder. Note that it will take 30 ~ 40 minutes to do so.  
 
 # Description:  
-Our code uses web crawling technique to gather lyrics data of top songs from historical Billboard chart, and utilizes TF-IDF based algorithm to do similarity  
-analysis with other lyrics (from other songs or given by the user).  
+Our code uses web crawling technique to gather lyrics data of top songs from historical Billboard chart, and utilizes TF-IDF based algorithm to do similarity analysis with other lyrics (from other songs or given by the user).  
 
 # How to run:  
 To run the program, 
